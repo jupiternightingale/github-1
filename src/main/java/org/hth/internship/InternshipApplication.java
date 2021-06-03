@@ -4,7 +4,6 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -36,10 +35,10 @@ public class InternshipApplication implements ApplicationRunner {
     }
     private void printContentsOfGeode(){
         //loop over all keys on the servers and print out the keys and values.
-        for (Object currentkey : region.keySetOnServer()) {
-            System.out.println("currentkey = " + currentkey);
-            System.out.println("region.get(currentkey) = " + region.get(currentkey));
-        }
+        region.keySetOnServer().forEach(currentKey ->{
+            System.out.println("currentKey = " + currentKey);
+            System.out.println("region.get(currentKey) = " + region.get(currentKey));
+        });
     }
     private void initializeGeode() throws IllegalAccessException {
         //Loop over all of the fields in the "asciiart" class and store them in Apache Geode
