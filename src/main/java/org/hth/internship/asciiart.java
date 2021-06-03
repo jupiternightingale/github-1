@@ -1,7 +1,7 @@
 package org.hth.internship;
 
 public class asciiart {
-    public static final String squerl=
+    public static final String squirrel=
             "---------------------------------   " +
                     "                                  \n" +
                     "  bruh squirrel                   \n" +

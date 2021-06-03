@@ -25,3 +25,4 @@ certs/
 .idea/
 
 data/
+application.log

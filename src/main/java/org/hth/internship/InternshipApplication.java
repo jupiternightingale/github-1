@@ -4,37 +4,57 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import javax.swing.*;
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.util.Scanner;
 
 @SpringBootApplication
-public class InternshipApplication {
-    public static void main(String[] args) {
-        // main2(args);
+@Configuration
+public class InternshipApplication implements ApplicationRunner {
+    @Resource
+    private Region region;
+
+    @Bean(name = "region")
+    public Region createGeodeRegion(){
         ClientCache cache = new ClientCacheFactory()
                 .addPoolLocator("localhost", 10334)
+                .set("log-level", "error")
                 .create();
         Region<String, String> region = cache
                 .<String, String>createClientRegionFactory(ClientRegionShortcut.PROXY)
                 .create("goat");
 
+        return region;
+    }
+    private void printContentsOfGeode(){
         //loop over all keys on the servers and print out the keys and values.
         for (Object currentkey : region.keySetOnServer()) {
             System.out.println("currentkey = " + currentkey);
             System.out.println("region.get(currentkey) = " + region.get(currentkey));
         }
-        //the command will send the keys and values up into a sever/region where it is stored .
-        region.put("octopus", asciiart.octopus);
-        region.put("tree", asciiart.tree);
-        //pringint out what ever is nicole
-        System.out.println("region.get(\"nicole\") = " + region.get("nicole"));
-        for (Object currentkey : region.keySetOnServer()) {
-            System.out.println("currentkey = " + currentkey);
-            System.out.println("region.get(currentkey) = " + region.get(currentkey));
+    }
+    private void initializeGeode() throws IllegalAccessException {
+        //Loop over all of the fields in the "asciiart" class and store them in Apache Geode
+        //   Technically we only need todo this once when we first start up Apache Geode to initialize the database.
+        for (Field f : asciiart.class.getDeclaredFields()) {
+            String name = f.getName();
+            String value = (String) f.get(null);
+            region.put(name, value);
         }
+    }
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        printContentsOfGeode();
+        initializeGeode();
+        printContentsOfGeode();
 
         //loop forever
         while (true) {
@@ -46,13 +66,16 @@ public class InternshipApplication {
             System.out.println("region.get(userinput) = " + region.get(userinput));
         }
     }
+    public static void main(String[] args) throws IllegalAccessException {
+        SpringApplication.run(InternshipApplication.class, args);
+    }
 
     // the string allows the code to be run over and over again.
     public static void main2(String[] args) {
 
         for (long i = 1; i <= 50; i = i + 1) {
 
-            System.out.println(asciiart.squerl);
+            System.out.println(asciiart.squirrel);
             System.out.println(asciiart.tree);
             System.out.println(asciiart.doge);
             System.out.println(asciiart.frog);
