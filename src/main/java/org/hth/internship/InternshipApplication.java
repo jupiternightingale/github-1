@@ -59,25 +59,38 @@ public class InternshipApplication implements ApplicationRunner {
 
         //loop forever
         while (true) {
-            //read input from user
-            System.out.print("Name of art > ");
-            Scanner scanner = new Scanner(System.in);
-            String userinput = scanner.nextLine();
+            String userinput = getUserinput();
             //print out what the user typed and it's value
             if (userinput.equals("?")){
-                System.out.println("list of images:");
-                for (Object currentkey : region.keySetOnServer()) {
-                    System.out.println(currentkey);
-                }
+                printKeysOnServer();
             }else {
-                System.out.println("userinput = " + userinput);
-                String value = region.get(userinput);
-                if (value == null){
-                    System.out.println("image not found");
-                }else {
-                    System.out.println("region.get(userinput) = " + value);
-                }
+                printuserinput(userinput);
             }
+        }
+    }
+
+    private void printKeysOnServer() {
+        System.out.println("list of images:");
+        for (Object currentkey : region.keySetOnServer()) {
+            System.out.println(currentkey);
+        }
+    }
+
+    private String getUserinput() {
+        //read input from user
+        System.out.print("Name of art > ");
+        Scanner scanner = new Scanner(System.in);
+        String userinput = scanner.nextLine();
+        return userinput;
+    }
+
+    private void printuserinput(String userinput) {
+        System.out.println("userinput = " + userinput);
+        String value = region.get(userinput);
+        if (value == null){
+            System.out.println("image not found");
+        }else {
+            System.out.println("region.get(userinput) = " + value);
         }
     }
 
