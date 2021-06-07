@@ -64,7 +64,12 @@ public class InternshipApplication implements ApplicationRunner {
             String userinput = scanner.nextLine();
             //print out what the user typed and it's value
             System.out.println("userinput = " + userinput);
-            System.out.println("region.get(userinput) = " + region.get(userinput));
+            String value = region.get(userinput);
+            if (value == null){
+                System.out.println("image not found");
+            }else {
+                System.out.println("region.get(userinput) = " + value);
+            }
         }
     }
 
