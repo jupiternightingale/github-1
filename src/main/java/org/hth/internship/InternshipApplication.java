@@ -60,6 +60,7 @@ public class InternshipApplication implements ApplicationRunner {
         //loop forever
         while (true) {
             //read input from user
+            System.out.print("Name of art > ");
             Scanner scanner = new Scanner(System.in);
             String userinput = scanner.nextLine();
             //print out what the user typed and it's value
