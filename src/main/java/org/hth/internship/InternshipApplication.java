@@ -63,7 +63,9 @@ public class InternshipApplication implements ApplicationRunner {
             //print out what the user typed and it's value
             if (userinput.equals("?")){
                 printKeysOnServer();
-            }else {
+            }else if (userinput.equals("help")){
+                System.out.println("If ? is pressed a list of images will pop up");
+            } else{
                 printuserinput(userinput);
             }
         }
